@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Microservicios - Creación y consumo</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Consumo API Personas/Animales - Local</h1><br>
+        <button type="button" id="btnpersonas">Personas</button>
+        <table id="personas">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table><br>
+        
+        <label>Introduzca id de la persona</label>
+        <input type="text" id="cjpersona"/>
+        <button id="btnpersona" type="button">Get persona</button>
+        <div id="persona"></div><hr/>
+
+        <button type="button" id="btnanimales">Animales</button>
+        <table id="animales">
+            <thead>
+                <tr>
+                    <th>Clase</th>
+                    <th>Especie</th>
+                    <th>Familia</th>
+                    <th>Género</th>
+                    <th>Orden</th>
+                    <th>Id</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table><br>
+
+        <label>Introduzca id del animal</label>
+        <input type="text" id="cjanimal"/>
+        <button id="btnanimal" type="button">Get animal</button>
+        <div id="animal"></div>
+        
+        <script src="js/jquery-3.5.1.min.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function(){
+                $("#btnpersonas").click(function(){
+                    $.ajax({
+                        url: "api/personas",
+                        type: "get",
+                        dataType: "xml",
+                        success: function(data){
+                            var personas = $(data).find("persona");
+                            var html = "";
+                            personas.each(function(data){
+                                var edad = $(this).find("edad").text();
+                                var email = $(this).find("email").text();
+                                var id = $(this).find("idPersona").text();
+                                var nombre = $(this).find("nombre").text();
+                                html += "<tr>";
+                                html += "<td>" + id + "</td>";
+                                html += "<td>" + nombre + "</td>";
+                                html += "<td>" + edad + "</td>";
+                                html += "<td>" + email + "</td>";
+                                html += "</td>";
+                            });
+                            $("#personas tbody").html(html);
+                        }
+                    });
+                });
+
+                $("#btnpersona").click(function(){
+                    var id = $("#cjpersona").val();
+                    $.ajax({
+                        url: "api/personas/" + id,
+                        type: "get",
+                        dataType: "xml",
+                        success: function(data){
+                            var persona = $(data).find("persona");
+                            var html = "";
+                            var edad = $(persona).find("edad").text();
+                            var email = $(persona).find("email").text();
+                            var id = $(persona).find("idPersona").text();
+                            var nombre = $(persona).find("nombre").text();
+                            html += "<h3>Id: " + id + " - Nombre: " + nombre + "</h3)";
+                            html += "<h4> - Edad: " + edad + " - Email: " + email + "</h4)";
+                            $("#persona").html(html);
+                        }
+                    });
+                });
+
+                $("#btnanimal").click(function(){
+                    var id = $("#cjanimal").val();
+                    $.ajax({
+                        url: "api/animales/" + id,
+                        type: "get",
+                        dataType: "xml",
+                        success: function(data){
+                            var animal = $(data).find("animal");
+                            var html = "";
+                            var clase = $(animal).find("clase").text();
+                            var especie = $(animal).find("especie").text();
+                            var familia = $(animal).find("familia").text();
+                            var genero = $(animal).find("genero").text();
+                            var id = $(animal).find("id").text();
+                            html += "<h3>Clase: " + clase + " - Especie: " + especie + "</h3)";
+                            html += "<h3> - Familia: " + familia + " - Genero: " + genero + "</h3)";
+                            html += "<h3> - Id: " + id + "</h3)";
+                            $("#animal").html(html);
+                        }
+                    });
+                });
+                
+                $("#btnanimales").click(function(){
+                    $.ajax({
+                        url: "api/animales",
+                        type: "get",
+                        dataType: "xml",
+                        success: function(data){
+                            var personas = $(data).find("animal");
+                            var html = "";
+                            personas.each(function(data){
+                                var clase = $(this).find("clase").text();
+                                var especie = $(this).find("especie").text();
+                                var familia = $(this).find("familia").text();
+                                var genero = $(this).find("genero").text();
+                                var id = $(this).find("id").text();
+                                var orden = $(this).find("orden").text();
+                                html += "<tr>";
+                                html += "<td>" + clase + "</td>";
+                                html += "<td>" + especie + "</td>";
+                                html += "<td>" + familia + "</td>";
+                                html += "<td>" + genero + "</td>";
+                                html += "<td>" + orden + "</td>";
+                                html += "<td>" + id + "</td>";
+                                html += "</td>";
+                            });
+                            $("#animales tbody").html(html);
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
